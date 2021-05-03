@@ -40,3 +40,12 @@ You can download our high-resolution model [here] and our low-resolution model [
 ## Usage (inference)
 
 Run the `test.py` script followed by a few args in case you want to change the default settings.
+
+
+## Results
+
+| Model | MAE (k) |  RMSE (k)  |   MAE (SIS) |  RMSE (SIS)  |  
+| --- | --- | --- | --- | --- |
+| ConvLSTM (high-res, only CAL) | 0.0672 | 0.1031 |  46.77  | 68.05 | 
+| TVL-1 Optical Flow (high-res, only CAL) | 0.0782 | 0.1459 | 58.38 | 93.99 |
+ 
