@@ -6,7 +6,9 @@ This project was conducted using `pytorch==1.8.1`. It might also work with previ
 I have attached the requirements.txt of my conda environment, which you can use by calling `conda install --file requirements.txt`
 
 ## Configuration
-Please read the following descriptions before you start running any code. If you follow all steps you should be able to predict satellite-derived solar irradiance using our pretrained ConvLSTM model relatively quickly, but we have only supplied for a small period (2016-05-01 to 2016-05-05). 
+Please read the following descriptions before you start running any code. If you follow all steps you should be able to predict satellite-derived solar irradiance using our pretrained ConvLSTM model relatively quickly.   
+- If you are interested in the final product of solar irradiance forecasts, we have only supplied all the ingredients for a small period (2016-05-01 to 2016-05-05), but extending this is relatively straightforward and explained in detail later. 
+- If you are only interested in the effective cloud albedo, then you can use our setup for the entire period of 1983-01-01 - 2017-12-31 straight away.
 > The results shown in our paper are based on the entire test dataset (2016-2017), and this small subset is **only meant for other researchers to quickly validate or replicate our results or for prototyping new models.** Nevertheless, the results here largely align with the ones demonstrated in the paper.
 
 ### Input data
