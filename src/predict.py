@@ -131,7 +131,7 @@ def predict_hres(data_loader, irradiance_converter, CONFIG):
 if __name__ == '__main__':
     path = "../data/"
 
-    model_name = 'high_res'
+    model_name = 'low_res'
 
     " Test functionality "
     test_set = CONFIG[model_name]['dataset']
@@ -151,8 +151,7 @@ if __name__ == '__main__':
     print(results)
 
     # HIGH_RES
-    # {'k_mae': 0.2194863201641455, 'k_rmse': 0.2969194419258009, 'sis_mae': 96.8897588524185,
-    #  'sis_rmse': 135.75809370769008}
+    # {'k_mae': 0.12004301851479018, 'k_rmse': 0.1825383138365862, 'sis_mae': 50.41529016812339, 'sis_rmse': 70.59029430499895}
 
     # OPTFLOW_HIGH_RES
     # {'k_mae': 0.24039468338819053, 'k_rmse': 0.33058442126929277, 'sis_mae': 105.9204860144326, 'sis_rmse': 153.92797622929677}
