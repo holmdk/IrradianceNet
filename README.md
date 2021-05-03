@@ -1,5 +1,5 @@
 # IrradianceNet
-
+This is the official implementation of the [IrradianceNet paper]().
 
 ## 1. Installation
 This project was conducted using `pytorch==1.8.1`. It might also work with previous/future versions, but this is obviously not guaranteed.
