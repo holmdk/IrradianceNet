@@ -3,7 +3,16 @@
 
 ## Installation
 This project was conducted using `pytorch==1.8.1`. It might also work with previous/future versions, but this is obviously not guaranteed.
-I have attached the requirements.txt of my conda environment, which you can use by calling `conda install --file requirements.txt`
+I have attached the requirements.txt of my conda environment. Run the following two commands to get started.
+
+```
+git clone https://github.com/holmdk/IrradianceNet.git
+```
+
+Next, install virtual environment (conda but others should work too)
+```
+conda install --file requirements.txt
+```
 
 ## Configuration
 Please read the following descriptions before you start running any code. If you follow all steps you should be able to predict satellite-derived solar irradiance using our pretrained ConvLSTM model relatively quickly.   
