@@ -1,11 +1,9 @@
 """
-Data loading script for the effective cloud albedo dataset
+Data loading script without patch-based for the effective cloud albedo dataset
 """
-# Author: Andreas Holm Nielsen <ahn@eng.au.dk>
-from numpy.core.multiarray import ndarray
-from torch.utils.data import Dataset
+# Author: Andreas Holm Nielsen <ahn@ece.au.dk>
 
-import xarray as xr
+from torch.utils.data import Dataset
 import torch
 import numpy as np
 import pandas as pd
@@ -13,14 +11,13 @@ import pandas as pd
 
 class AlbedoDataset(Dataset):
     """
-    Low-resolution Effective Cloud Albedo Dataset
+    Non-patch-based Effective Cloud Albedo Dataset
     """
 
     def __init__(self, root_dir: str, nc_filename: str, variable: str = 'k',
                  n_past_frames: int = 4, n_future_frames: int = 4,
                  return_timestamp: bool = True) -> None:
         """
-
         Parameters
         ----------
         root_dir : str
@@ -62,7 +59,6 @@ class AlbedoDataset(Dataset):
     def __len__(self) -> None:
         return len(self.possible_starts)
 
-    # def __getitem__(self, idx: int) -> Tuple[Any, Any, Union[torch.Tensor, list]]:
     def __getitem__(self, idx: int) -> torch.Tensor():
         index = self.possible_starts[idx]
         idx_end =(index + self.n_past_frames + self.n_future_frames)

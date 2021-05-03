@@ -24,7 +24,6 @@ class IrradianceConverter:
         for batch in range(target_times.shape[1]):
             sis_clear = self.clearsky.sel(time=target_times.iloc[:, batch].values)['SIS_clear']
             if sis_clear.shape[-1] != data.shape[-1]:
-                # INTERPOLATE HERE!
                 sis_clear = sis_clear.sel(lat=self.coords['lat'], lon=self.coords['lon'])
 
             sis_data[:, batch, 0] = data[:, batch, 0] * sis_clear.values

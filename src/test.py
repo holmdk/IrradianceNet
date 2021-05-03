@@ -1,3 +1,8 @@
+"""
+Script for running inference of IrradianceNet model
+"""
+# Author: Andreas Holm Nielsen <ahn@ece.au.dk>
+
 import torch
 import numpy as np
 import pandas as pd
@@ -11,7 +16,7 @@ from src.data.IrradianceConverter import IrradianceConverter
 from src.data.utils.helper_functions import convert_to_full_res, interpolate_borders
 
 
-def predict_hres(data_loader, irradiance_converter, CONFIG):
+def run_evaluation(data_loader, irradiance_converter, CONFIG):
     if CONFIG['pretrained_path'] is not None:
         if 'ckpt' in CONFIG['pretrained_path']:
             model_weights = torch.load(CONFIG['pretrained_path'])['state_dict']
@@ -68,11 +73,13 @@ def predict_hres(data_loader, irradiance_converter, CONFIG):
                     full_pred_img[:, :, patch] = y_hat
                     full_output_img[:, :, patch] = y[:, :, patch]
 
-                    if CONFIG['interpolate_borders']:
-                        y_pred_plot = interpolate_borders(full_pred_img, patch_dim, 128, double=True)
 
                 pred_Y = convert_to_full_res(full_pred_img, img_size, patch_dim, y.shape)
                 gt_Y = convert_to_full_res(full_output_img, img_size, patch_dim, y.shape)
+
+                if CONFIG['interpolate_borders']:
+                    for b in range(pred_Y.shape[0]):
+                        pred_Y[b] = interpolate_borders(pred_Y[b].squeeze(), patch_dim, 128, double=True).squeeze().unsqueeze(1)
             else:
                 if CONFIG['model_arch'] == 'opt_flow':
                     y_hat = optflow_predict(X=x[:, -2:].unsqueeze(2),
@@ -107,7 +114,7 @@ def predict_hres(data_loader, irradiance_converter, CONFIG):
             if CONFIG['save_images']:
                 create_video(pred_Y, gt_Y, i, model_name)
 
-    # Remove Infs   # CHECK FOR MAXIMUM VALS
+    # Remove Infs
     mae = np.array(mae)
     mae = mae[~np.isinf(mae)]
 
@@ -145,21 +152,8 @@ if __name__ == '__main__':
     irradiance_converter = IrradianceConverter(path, sis_name='SIS_2016_05.nc',
                                                sis_clearsky_name='irradiance_2016_05.nc',
                                                resolution='low' if model_name in ['low_res'] else 'high_res')
-    results = predict_hres(test_loader, irradiance_converter, CONFIG[model_name])
+    results = run_evaluation(test_loader, irradiance_converter, CONFIG[model_name])
     print(results)
-
-    # HIGH_RES
-    # {'k_mae': 0.12004301851479018, 'k_rmse': 0.1825383138365862, 'sis_mae': 50.41529016812339, 'sis_rmse': 70.59029430499895}
-
-    # OPTFLOW_HIGH_RES
-    # {'k_mae': 0.13847307685187193, 'k_rmse': 0.2225737915169902, 'sis_mae': 56.74756959908323,  'sis_rmse': 89.04220459668166}
-
-    # LOW-RES MODEL
-    # {'k_mae': 0.1848025021689479, 'k_rmse': 0.26159137647790015, 'sis_mae': 76.65433848812302, 'sis_rmse': 110.31167581532746}
-
-
-
-    #TODO: TRY INTERPOLATION ALONG BORDERS!
 
 
 

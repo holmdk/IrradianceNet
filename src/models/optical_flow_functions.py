@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import sys
 import numpy as np
 import torch
@@ -17,7 +16,6 @@ def draw_hsv(flow):
     return bgr
 
 def warp_flow(img, flow):
-    # img = cv2.normalize(img, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
     h, w = flow.shape[:2]
     flow = -flow
     flow[:,:,0] += np.arange(w)
@@ -48,7 +46,6 @@ def create_flow(X, flow_model, params=None):
         norm_im2 = cv2.normalize(im2, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
 
         # compute dense optical flow
-
         if flow_model == 'farneback':
             flow = cv2.calcOpticalFlowFarneback(prev=norm_im1,
                                                 next=norm_im2,
@@ -68,10 +65,6 @@ def create_flow(X, flow_model, params=None):
                 medianFiltering=params['medianFiltering']
             )
             flow = optical_flow.calc(im1.astype(np.float32), im2.astype(np.float32), flow=None)
-            # flow = optical_flow.calc(im1, im2, flow=None)
-            # grayimg = cv2.cvtColor(im1, cv2.COLOR_BGR2GRAY)
-            # p0 = np.stack((im1.flatten(), im2.flatten()), axis=1).astype(np.float32)
-            # flow = optical_flow.calc(np.expand_dims(im1, 0), np.expand_dims(im2, 0), flow=None)
         else:
             sys.exit('Wrong flow model')
 
@@ -95,9 +88,5 @@ def optflow_predict(X, flow_model='farneback', future=4, params=None):
         for t in range(future):
             input_batch = warp_flow(input_batch, flow[b])
             pred[b, t, 0] = torch.tensor(input_batch)
-
-    # print('Finished batch')
-    # plt.imshow(X.squeeze()[-1])
-    # plt.imshow(pred.squeeze()[3])
 
     return pred

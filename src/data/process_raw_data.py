@@ -10,7 +10,6 @@ def get_data(config, variable):
     Retrieve raw netcdf dataset of effective cloud albedo
     """
     data = xr.open_mfdataset(config['root_dir'] + variable + '*')[variable]
-    # data = xr.open_mfdataset('C:/Users/Holm/Documents/IrradianceNet/data/SARAH/*')['CAL']
     return data
 
 

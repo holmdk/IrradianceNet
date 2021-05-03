@@ -1,10 +1,9 @@
-import torch
+" Implementation from https://github.com/jhhuang96/ConvLSTM-PyTorch "
+
 import torch.nn as nn
 from collections import OrderedDict
 import torch
 import logging
-
-
 
 def make_layers(block):
     layers = []
@@ -57,7 +56,6 @@ class CLSTM_cell(nn.Module):
                       4 * self.num_features, self.filter_size, 1,
                       self.padding),
             nn.GroupNorm(4 * self.num_features // 32, 4 * self.num_features)  # best for regression
-            # nn.BatchNorm2d(4 * self.num_features)
         )
 
         self.seq_len = seq_len
@@ -72,7 +70,6 @@ class CLSTM_cell(nn.Module):
         else:
             hx, cx = hidden_state
         output_inner = []
-        # print( range(self.seq_len))
         for index in range(self.seq_len):
             if inputs is None:
                 x = torch.zeros(hx.size(0), self.input_channels, self.shape[0],
@@ -80,13 +77,8 @@ class CLSTM_cell(nn.Module):
             else:
                 x = inputs[index, ...]
 
-            # print(x.shape)
-            # print(hx.shape)
-            # print('\n')
             combined = torch.cat((x, hx), 1)
             gates = self.conv(combined)  # gates: S, num_features*4, H, W
-            # torch.Size([2, 512, 128, 128])  --> should it be 256??
-            # print(index)
 
             # it should return 4 tensors: i,f,g,o
             ingate, forgetgate, cellgate, outgate = torch.split(
@@ -101,7 +93,6 @@ class CLSTM_cell(nn.Module):
             output_inner.append(hy)
             hx = hy
             cx = cy
-        # print(torch.stack(output_inner).shape)
         return torch.stack(output_inner), (hy, cy)
 
 def convlstm_encoder_params(in_chan=7, seq_len=4):
@@ -183,7 +174,6 @@ class Decoder(nn.Module):
         self.seq_len = seq_len
 
         for index, (params, rnn) in enumerate(zip(subnets, rnns)):
-            # if index == 2:
             setattr(self, 'rnn' + str(self.blocks - index), rnn)
             setattr(self, 'stage' + str(self.blocks - index),
                     make_layers(params))
@@ -216,29 +206,14 @@ class ConvLSTM(nn.Module):
 
     def __init__(self, seq_len, in_chan=7, input_seq_len=2):
         super(ConvLSTM, self).__init__()
-        # self.probabilistic = probabilistic
         encoder_params = convlstm_encoder_params(in_chan, input_seq_len)
         decoder_params = convlstm_decoder_params(seq_len)
 
         self.encoder = Encoder(encoder_params[0], encoder_params[1], )
         self.decoder = Decoder(decoder_params[0], decoder_params[1], seq_len=seq_len)
 
-        # if probabilistic:
-        #     # self.classifier = nn.Linear(1, 240)  # get probability of each discrete bin from torch.tensor(np.arange(0, 1.2, 0.005))
-        #     self.classifier = nn.Conv3d(in_channels=1, out_channels=240, kernel_size=3, padding=1)  # get probability of each discrete bin from torch.tensor(np.arange(0, 1.2, 0.005))
-        #     torch.nn.init.xavier_uniform_(self.classifier.weight)
-        #     self.classifier.bias.data.fill_(0)
-        #     self.relu = torch.nn.ReLU()
-
     def forward(self, input, future_seq=10):
         input = input.permute(0, 1, 4, 2, 3)
         state = self.encoder(input)
         output = self.decoder(state)
-
-        # if self.probabilistic:
-        #     output = self.relu(output)
-        #     output = output.permute(0, 2, 1, 3, 4)
-        #     output = self.classifier(output)
-        #     # output = output.permute(0, 2, 1, 3, 4)
-
         return output

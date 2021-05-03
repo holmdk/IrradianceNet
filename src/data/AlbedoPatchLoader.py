@@ -1,18 +1,17 @@
 """
-Data loading script for the effective cloud albedo dataset
+Data loading script with patch-based loading for the effective cloud albedo dataset
 """
-# Author: Andreas Holm Nielsen <ahn@eng.au.dk>
+# Author: Andreas Holm Nielsen <ahn@ece.au.dk>
 
 from torch.utils.data import Dataset
 import torch
-import sys
 import numpy as np
 import pandas as pd
 
 
 class AlbedoDataset(Dataset):
     """
-    Full-resolution Effective Cloud Albedo Dataset with patch loading
+    Patch-based Effective Cloud Albedo Dataset
     """
 
     def __init__(self, root_dir: str, nc_filename: str, variable: str = 'k',
@@ -64,7 +63,6 @@ class AlbedoDataset(Dataset):
     def __len__(self) -> int:
         return len(self.possible_starts)
 
-    # def __getitem__(self, idx: int) -> Tuple[Any, Any, Union[torch.Tensor, list]]:
     def __getitem__(self, idx: int) -> torch.Tensor():
         index = self.possible_starts[idx]
         idx_end = (index + self.n_past_frames + self.n_future_frames)
@@ -93,13 +91,11 @@ class AlbedoDataset(Dataset):
         else:
             times = []
 
-
         X = video_clip[:self.n_past_frames]
         if self.train:
             y = video_clip[self.n_past_frames:, 0]
         else:
             y = video_clip[self.n_past_frames:, :, 0]
-
 
         # preprocess values
         if self.variable == 'k':
