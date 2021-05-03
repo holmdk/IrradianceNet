@@ -6,7 +6,8 @@ This project was conducted using `pytorch==1.8.1`. It might also work with previ
 I have attached the requirements.txt of my conda environment, which you can use by calling `conda install --file requirements.txt`
 
 ## Configuration
-Please read the following descriptions before you start running any code. If you follow all steps you should be able to predict satellite-derived solar irradiance using our pretrained ConvLSTM model relatively quickly, but we have only supplied for a small period (2016-05-01 to 2016-05-05). The results shown in our paper are based on the entire test dataset (2016-2017), and this small subset is **only meant for other researchers to quickly validate or replicate our results or for prototyping new models.** Nevertheless, the results here largely align with the ones demonstrated in the paper.
+Please read the following descriptions before you start running any code. If you follow all steps you should be able to predict satellite-derived solar irradiance using our pretrained ConvLSTM model relatively quickly, but we have only supplied for a small period (2016-05-01 to 2016-05-05). 
+> The results shown in our paper are based on the entire test dataset (2016-2017), and this small subset is **only meant for other researchers to quickly validate or replicate our results or for prototyping new models.** Nevertheless, the results here largely align with the ones demonstrated in the paper.
 
 ### Input data
 As we are not the owners of the original Effective Cloud Albedo dataset, you will have to download the data from the [following site](https://wui.cmsaf.eu/safira/action/viewDoiDetails?acronym=SARAH_V002_01). Perform the following steps:
@@ -25,7 +26,7 @@ The usage of pre-processing is relatively limited and will be described in detai
 3. Run the `/src/data/process_raw_data.py` script.
 4. You should now have all the data required to run inference.  
 
-__\*Note__ the raw dataset size is multiple terabytes so there is a high probability you will run our of memory if you run this script for a large portion of the dataset.
+__\*Note__ the raw dataset size is multiple terabytes so there is a high probability you will run our of memory if you run this script for a large portion of the dataset.  
 __\*\*Note__ there are many ways to derive clear sky irradiance, which is the component needed to convert CAL to SIS. Here, I have attached for the period 2016-05-01 to 2016-05-05 using Ineiched Clear Sky model. If you want more clear-sky data this should be trivial using the popular [pvlib library](https://pvlib-python.readthedocs.io/en/stable/).
 
 ### Pre-trained model
