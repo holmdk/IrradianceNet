@@ -73,7 +73,9 @@ There are other arguments you can change as well, but this is only recommended f
 | TVL-1 Optical Flow (high-res, only CAL) | 0.0782 | 0.1459 | 58.38 | 93.99 |
 
 
-**In the figures below, we demonstrate predictions in the top row, ground truth in middle row and the pixel-wise absolute error in the bottom row.**
+**In the figures below, we**
+- Demonstrate predictions in the top row, ground truth in middle row and the pixel-wise absolute error in the bottom row
+- Column 1 is one-step ahead (30 minutes), and column 2 is two-steps ahead (1 hour)
 
 ## 5. Visualization
 
