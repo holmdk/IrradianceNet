@@ -48,7 +48,13 @@ You can download our high-resolution model [here] and our low-resolution model [
 
 ## Usage (inference)
 
-Run the `test.py` script followed by a few args in case you want to change the default settings.
+Run the following script:
+
+```python
+python test.py
+```
+
+You can change a few arguments if you want to:
 
 
 ## Results
