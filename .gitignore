@@ -1,1 +1,7 @@
 .idea/
+*.csv
+*.pt
+*.nc
+*.pyc
+*.ckpt
+*.pth
