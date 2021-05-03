@@ -32,7 +32,10 @@ __\*Note__ the raw dataset size is multiple terabytes so there is a high probabi
 __\*\*Note__ there are many ways to derive clear sky irradiance, which is the component needed to convert CAL to SIS. Here, I have attached for the period 2016-05-01 to 2016-05-05 using Ineiched Clear Sky model. If you want more clear-sky data this should be trivial using the popular [pvlib library](https://pvlib-python.readthedocs.io/en/stable/).
 
 ### Pre-trained model
-We are supplying a pre-trained model specifically optimized for 2-step ahead prediction (1-hour), but the model can still be used for longer time horizons by setting n to be the number of future frames you want to predict using the flag `n_future_frames=n`. If you are interested in models optimized for more time steps let me know (up to 8 future frames).
+We are supplying a pre-trained model specifically optimized for 2-step ahead prediction (1-hour), but the model can still be used for longer time horizons by setting n to be the number of future frames you want to predict using the flag `n_future_frames=n`. If you are interested in models optimized for more time steps let me know (up to 8 future frames).  
+
+You can download our high-resolution model [here] and our low-resolution model [here]. After downloading these, put them into the `/models/full_res` and `/models/small_res` folders.
+
 
 ## Usage (inference)
 
