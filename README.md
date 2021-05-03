@@ -26,6 +26,7 @@ As we are not the owners of the original Effective Cloud Albedo dataset, you wil
 2. Select both a) the Effective cloud albedo (CAL) and b) Surface incoming shortwave radiation (SIS) with  "Instantaneous" 
 3. Download the following time interval (2016-05-01 to 2016-05-05) for both a) and b)
 4. See the next section on Pre-processing on how to proceed from these raw datasets.
+5. Download [clear sky irradiance dataset](https://drive.google.com/file/d/16__58FmYl31wxuwcUcvS9Z52Zrex8YcT/view?usp=sharing)
 
 - If you want to use meta-features (like in the original paper), most are relatively straightforward to generate and download. We give a description of these in the paper. If you want to use these meta-features, you need to append them to the Dataloader and also set `in_channels=n`, where n is the number of meta-features in the ConvLSTM model. Using all meta-features mentioned in the paper will boost performance of the ConvLSTM models by reducing MAE (over the entire test set) by roughly 5-10, but the version proposed here is still superior to the state-of-the-art TVL-1 Optical Flow. 
 
@@ -43,18 +44,24 @@ __\*\*Note__ there are many ways to derive clear sky irradiance, which is the co
 ### Pre-trained model
 We are supplying a pre-trained model specifically optimized for 2-step ahead prediction (1-hour), but the model can still be used for longer time horizons by setting n to be the number of future frames you want to predict using the flag `n_future_frames=n`. If you are interested in models optimized for more time steps let me know (up to 8 future frames).  
 
-You can download our high-resolution model [here] and our low-resolution model [here]. After downloading these, put them into the `/models/full_res` and `/models/small_res` folders.
+You can download our high-resolution model [here](https://drive.google.com/file/d/1fAbgjOavED_BArz00gzoLnp0KXXujGyf/view?usp=sharing). After downloading, put the model into the `/models/full_res` folder.
 
 
 ## Usage (inference)
 
-Run the following script:
+If you want to run the ConvLSTM model with default settings, run the following:
 
-```python
+```python 
 python test.py
 ```
 
-You can change a few arguments if you want to:
+If you want the benchmark TVL-1 Optical Flow, run the following:
+
+```python 
+python test.py --model_name opt_flow
+```
+
+There are other arguments you can change as well, but this is only recommended for expert users.
 
 
 ## Results
