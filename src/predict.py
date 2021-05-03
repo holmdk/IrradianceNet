@@ -79,8 +79,6 @@ def predict_hres(data_loader, irradiance_converter, CONFIG):
                                              flow_model=CONFIG['flow_model'],
                                              future=CONFIG['n_steps_ahead'],
                                              params=CONFIG['params'])  # tvl1
-                    # plt.imshow(x[0, -1, :, :].numpy())
-                    # plt.imshow(y_hat[0, 1, 0, :, :].numpy())
                 else:
                     y_hat = CONFIG['model_arch'].forward(x.unsqueeze(4).cuda().float()).squeeze().detach().cpu().unsqueeze(2)
 
@@ -105,7 +103,7 @@ def predict_hres(data_loader, irradiance_converter, CONFIG):
                 mae_sis.append(np.nanmean(abs(pred_SIS[:, batch].numpy() - gt_SIS[batch].values)))
                 rmse_sis.append(np.sqrt(np.nanmean(np.power(pred_SIS[:, batch].numpy() - gt_SIS[batch].values, 2))))
 
-            # OR HERE, BUT VIDEO LOOKS STRANGE!!
+            # Save images
             if CONFIG['save_images']:
                 create_video(pred_Y, gt_Y, i, model_name)
 
@@ -131,7 +129,7 @@ def predict_hres(data_loader, irradiance_converter, CONFIG):
 if __name__ == '__main__':
     path = "../data/"
 
-    model_name = 'low_res'
+    model_name = 'high_res'
 
     " Test functionality "
     test_set = CONFIG[model_name]['dataset']
@@ -144,9 +142,9 @@ if __name__ == '__main__':
         pin_memory=False
     )
 
-    irradiance_converter = IrradianceConverter(path, resolution='low' if model_name in ['low_res'] else 'high_res')  # 'opt_flow'
-
-    # results = predict_hres(test_loader, irradiance_converter, CONFIG['high_res'])
+    irradiance_converter = IrradianceConverter(path, sis_name='SIS_2016_05.nc',
+                                               sis_clearsky_name='irradiance_2016_05.nc',
+                                               resolution='low' if model_name in ['low_res'] else 'high_res')
     results = predict_hres(test_loader, irradiance_converter, CONFIG[model_name])
     print(results)
 
@@ -154,16 +152,11 @@ if __name__ == '__main__':
     # {'k_mae': 0.12004301851479018, 'k_rmse': 0.1825383138365862, 'sis_mae': 50.41529016812339, 'sis_rmse': 70.59029430499895}
 
     # OPTFLOW_HIGH_RES
-    # {'k_mae': 0.24039468338819053, 'k_rmse': 0.33058442126929277, 'sis_mae': 105.9204860144326, 'sis_rmse': 153.92797622929677}
-
+    # {'k_mae': 0.13847307685187193, 'k_rmse': 0.2225737915169902, 'sis_mae': 56.74756959908323,  'sis_rmse': 89.04220459668166}
 
     # LOW-RES MODEL
-    # {'k_mae': 0.24510830475319106, 'k_rmse': 0.32695535385346064, 'sis_mae': 112.02343463198096,
-    #  'sis_rmse': 158.30714587677997}
+    # {'k_mae': 0.1848025021689479, 'k_rmse': 0.26159137647790015, 'sis_mae': 76.65433848812302, 'sis_rmse': 110.31167581532746}
 
-
-    # {'k_mae': 0.24143351744533464, 'k_rmse': 0.33113294353102074, 'sis_mae': 107.73061761958793,
-    # 'sis_rmse': 156.56728592570312}
 
 
     #TODO: TRY INTERPOLATION ALONG BORDERS!

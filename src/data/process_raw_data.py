@@ -5,11 +5,11 @@ import torch
 from src.data.utils.helper_functions import mask_latlon
 
 # Load data
-def get_data(config):
+def get_data(config, variable):
     """
     Retrieve raw netcdf dataset of effective cloud albedo
     """
-    data = xr.open_mfdataset(config['root_dir'] + '*')['CAL']
+    data = xr.open_mfdataset(config['root_dir'] + variable + '*')[variable]
     # data = xr.open_mfdataset('C:/Users/Holm/Documents/IrradianceNet/data/SARAH/*')['CAL']
     return data
 
@@ -95,6 +95,12 @@ def transform(video, nan_to_num = True):
     return video_clip
 
 
+def convert_from_CAL_to_k(data):
+    """
+    Transforms from CAL to k using k = (1 - CAL)
+    """
+    return 1 - data
+
 def save(data, possible_starts, config):
     """
     Save cloud albedo as video in torch.tensor, possible starts in numpy array and timestamps in pandas dataframe
@@ -104,30 +110,41 @@ def save(data, possible_starts, config):
 
     print('Saving torch data...')
     torch.save(video_clip,
-               config['out_dir'] + config['nc_out_filename'] + '.pt')
+               config['out_dir'] + config['nc_out_filename'].split('.')[0] + '.pt')
 
     print('Saving possible starts')
-    with open(config['out_dir'] + config['nc_out_filename'] + '_possible_starts' + '.npy',
+    with open(config['out_dir'] + config['nc_out_filename'].split('.')[0] + '_possible_starts' + '.npy',
               'wb') as f:
         np.save(f, possible_starts)
 
     print('Saving timestamps')
     timestamps = pd.DataFrame(data.time.values,
                                    columns=['StartTimeUTC'])  # [self.possible_starts]
-    timestamps.to_csv(config['out_dir'] + config['nc_out_filename'] + '_timestamps' + '.csv', index=False)
+    timestamps.to_csv(config['out_dir'] + config['nc_out_filename'].split('.')[0] + '_timestamps' + '.csv', index=False)
 
 
 def process_data(config):
-    " CONFIG "
+    """
+    Process raw SARAH 2.1 data
+    """
     # Pipeline
-    cloud_albedo = get_data(config)
+    cloud_albedo = get_data(config, 'CAL')
     cloud_albedo = mask_data(cloud_albedo)
     cloud_albedo = cloud_albedo.load()  # We do not load before masking, as doing so would require more memory
     cloud_albedo = interpolate_to_latslons(cloud_albedo, config)
     cloud_albedo = interpolate_neighboring_nans(cloud_albedo)
     cloud_albedo = remove_nans(cloud_albedo, config)
+    cloud_albedo = convert_from_CAL_to_k(cloud_albedo)
     possible_starts = get_possible_starts(cloud_albedo, config)
+    print('Saving CAL data...')
     save(cloud_albedo, possible_starts, config)
+
+    if config['process_SIS']:
+        sis_data = get_data(config, 'SIS')
+        sis_data = mask_data(sis_data)
+        sis_data = sis_data.load()
+        print('Saving SIS data...')
+        sis_data.to_netcdf(config['out_dir'] + config['nc_out_filename'].split('.')[0].replace('CAL', 'SIS') + '.nc')
 
 
 
@@ -135,17 +152,17 @@ if __name__ == '__main__':
     config = {
         'root_dir': '../../data/SARAH/',
         'out_dir': '../../data/',
-        'nc_out_filename': 'CAL_2015_05.nc',
+        'nc_out_filename': 'CAL_2016_05.nc',
         'nans_allowed_percentage': 0.05,
         'n_past_steps': 4,
         'n_future_steps': 2,
-        'interpolation_factor': 1
+        'interpolation_factor': 1,
+        'process_SIS': True                # NOTE THIS IS OPTIONAL
     }
-    import os
-    print(os.getcwd())
-    print('Starting processing of SARAH 2.1 dataset')
+
+    print('Starting processing of SARAH 2.1 dataset...')
     try:
         process_data(config)
-        print('Finished processing of SARAH 2.1 dataset')
+        print('Finished processing of SARAH 2.1 dataset...')
     except Exception as e:
         print('Could not process SARAH dataset due to {}, exiting script...'.format(e))

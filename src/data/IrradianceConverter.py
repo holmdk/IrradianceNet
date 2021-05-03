@@ -3,10 +3,10 @@ import torch
 from src.data.utils.helper_functions import *
 
 class IrradianceConverter:
-    def __init__(self, path, sis_name='test_subset_SIS.nc', resolution='high'):
+    def __init__(self, path, sis_name='SIS_2016_05.nc', sis_clearsky_name='irradiance_2016_05.nc', resolution='high'):
         self.resolution = resolution
 
-        self.clearsky = xr.open_dataset(path + 'test_subset_clearsky.nc')  # t
+        self.clearsky = xr.open_dataset(path + sis_clearsky_name)  # t
         self.clearsky = remove_duplicates(self.clearsky)
         self.clearsky['SIS_clear'] = self.clearsky['SIS_clear'].clip(min=0, max=self.clearsky['SIS_clear'].quantile(0.99).item())  # we have a few outliers
 
@@ -15,15 +15,8 @@ class IrradianceConverter:
         self.SIS['SIS'] = self.SIS['SIS'].clip(min=0, max=self.SIS['SIS'].quantile(0.99).item())  # we have a few outliers
 
         if resolution == 'low':
-            self.coords = xr.open_dataset(path + 'lres_test_subset_SIS.nc')  # t
+            self.coords = xr.open_dataset(path + 'lres_test_SIS.nc')  # t
             self.coords = {'lat': self.coords.lat, 'lon':self.coords.lon}
-
-        # path = 'F:/saved_repo_from_ubuntu/'
-        # data = xr.open_dataset(path + '128x128_CAL2016_17.nc')
-        #
-        # data.sel(time=self.clearsky.time)['k'].to_netcdf('C:/Users/Holm/Documents/IrradianceNet/data/lres_test_subset.nc')
-        # data_torch = torch.tensor(data.sel(time=self.clearsky.time)['k'].values)
-        # torch.save(data_torch, 'C:/Users/Holm/Documents/IrradianceNet/data/lres_test_subset.pt')
 
     def convert_k_to_SSI(self, data, target_times):
         sis_data = torch.zeros_like(data)

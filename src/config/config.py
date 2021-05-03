@@ -22,17 +22,17 @@ CONFIG = {
           'pretrained_path': '../models/full_res/convlstm_1h_ahead_patch.ckpt',
           'n_steps_ahead': 2,
           'only_last_two_timesteps': True,
-          'save_images': False,
+          'save_images': True,
           'patch_based': True,
           'interpolate_borders': False,
-          'nc_filename': 'test.nc',
+          'nc_filename': 'CAL_2016_05.nc',
           'dataset': AlbedoPatchDataset(root_dir=path,
-                       nc_filename='test.nc',
+                       nc_filename='CAL_2016_05.nc',
+                       # nc_filename='test.nc',
                        variable='k',
                        n_past_frames=4,
                        n_future_frames=2,
                        return_timestamp=True,
-                       include_metafeatures=False,
                        patch_size=128,
                        train=False)
       },
@@ -50,16 +50,15 @@ CONFIG = {
           'pretrained_path': '../models/small_res/45.pth',
           'n_steps_ahead': 2,
           'only_last_two_timesteps': True,
-          'save_images': False,
+          'save_images': True,
           'patch_based': False,
           'nc_filename': 'lres_test.nc',
           'dataset': AlbedoDataset(root_dir=path,
-                       nc_filename='lres_test.nc',
+                       nc_filename='CAL_2016_05.nc',
                        variable='k',
                        n_past_frames=4,
                        n_future_frames=2,
-                       return_timestamp=True,
-                       include_metafeatures=False)
+                       return_timestamp=True)
       },
   'opt_flow':
       {
@@ -81,16 +80,14 @@ CONFIG = {
           },
           'n_steps_ahead': 2,
           'only_last_two_timesteps': True,
-          'save_images': False,
+          'save_images': True,
           'patch_based': False,
-          'nc_filename': 'test.nc',
+          # 'nc_filename': 'CAL_2016_05.nc',
           'dataset': AlbedoDataset(root_dir=path,
-                       # nc_filename='lres_test.nc',
-                       nc_filename='test.nc',
+                       nc_filename='CAL_2016_05.nc',
                        variable='k',
                        n_past_frames=4,
                        n_future_frames=2,
-                       return_timestamp=True,
-                       include_metafeatures=False)
+                       return_timestamp=True)
       }
 }
