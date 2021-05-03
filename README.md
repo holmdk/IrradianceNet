@@ -47,6 +47,7 @@ Run the `test.py` script followed by a few args in case you want to change the d
 2016-05-01 to 2016-05-05
 | Model | MAE (k) |  RMSE (k)  |   MAE (SIS) |  RMSE (SIS)  |  
 | --- | --- | --- | --- | --- |
-| ConvLSTM (high-res, only CAL) | 0.0672 | 0.1031 |  46.77  | 68.05 | 
+| ConvLSTM (high-res, only CAL) | 0.0674 | 0.1032 |  46.81  | 68.09 | 
 | TVL-1 Optical Flow (high-res, only CAL) | 0.0782 | 0.1459 | 58.38 | 93.99 |
+
  
