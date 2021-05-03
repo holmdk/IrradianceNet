@@ -44,6 +44,7 @@ Run the `test.py` script followed by a few args in case you want to change the d
 
 ## Results
 
+2016-05-01 to 2016-05-05
 | Model | MAE (k) |  RMSE (k)  |   MAE (SIS) |  RMSE (SIS)  |  
 | --- | --- | --- | --- | --- |
 | ConvLSTM (high-res, only CAL) | 0.0672 | 0.1031 |  46.77  | 68.05 | 
