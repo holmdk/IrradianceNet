@@ -57,3 +57,15 @@ def interpolate_borders(y_pred, patch_dim, patch_size, double=True):
                     y_pred[b, t, :, idx_start:idx_end] = interpol_values_cols.T
 
     return y_pred
+
+
+
+def mask_latlon(df):
+    mask = (
+            (df.coords["lat"] > 36.695)
+            & (df.coords["lat"] < 62.3)
+            & (df.coords["lon"] > -5.305)
+            & (df.coords["lon"] < 20.295)
+    )
+
+    return df.where(mask, drop=True)
