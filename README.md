@@ -15,7 +15,7 @@ As we are not the owners of the original Effective Cloud Albedo dataset, you wil
 
 ### Pre-processing
 The usage of pre-processing is relatively limited and will be described in detail in a future publication. The primary steps are:
-- Before the dataset can be used in the `AlbedoLoader` and `AlbedoPatchLoader` module, it will need to be converted to a `torch.tensor` and saved to a torch file called `lres_test_subset.pt` and `test_subset.pt`, respectively. I have attached a script for this functionality called `process_raw_data.py`.
+- Before the dataset can be used in the `AlbedoLoader` and `AlbedoPatchLoader` module, it will need to be converted to a `torch.tensor` and saved to a torch file called `lres_test_subset.pt` and `test_subset.pt`, respectively. I have attached a script for this functionality called `process_raw_data.py`. Note the raw dataset size is 7.5 TiB, so there is a high probability you will run our of memory if you run this script for a large portion of the dataset.
 - **Importantly**, if you want to use the exact same dates as we do in this repo here, I have attached a `test_subset_timestamps.csv` that you can extract from the raw dataset BEFORE saving it to a torch file. The results shown in our paper are based on the entire test dataset, however, and this subset is **only meant for other researchers to quickly validate or replicate our results or for prototyping new models.**
 
 ### Pre-trained model
