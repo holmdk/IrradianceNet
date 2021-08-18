@@ -1,6 +1,13 @@
 # IrradianceNet
 This is the official implementation of the [IrradianceNet paper]().
 
+### Sample 1
+![Alt Text](results/convlstm/video_sample1.gif)
+
+### Sample 2
+![Alt Text](results/convlstm/video_sample2.gif)
+
+
 ## 1. Installation
 This project was conducted using `pytorch==1.8.1`. It might also work with previous/future versions, but this is obviously not guaranteed.
 I have attached the requirements.txt of my conda environment. Run the following two commands to get started.
