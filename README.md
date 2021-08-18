@@ -1,5 +1,5 @@
 # IrradianceNet
-This is the official implementation of the [IrradianceNet paper]().
+This is the official implementation of the [IrradianceNet paper (work in progress)]().
 
 ### Sample 1
 ![Alt Text](results/convlstm/video_sample1.gif)
@@ -46,7 +46,7 @@ The usage of pre-processing is relatively limited and will be described in detai
 4. You should now have all the data required to run inference.  
 
 __\*Note__ the raw dataset size is multiple terabytes so there is a high probability you will run our of memory if you run this script for a large portion of the dataset.  
-__\*\*Note__ there are many ways to derive clear sky irradiance, which is the component needed to convert CAL to SIS. Here, I have attached for the period 2016-05-01 to 2016-05-05 using Ineiched Clear Sky model. If you want more clear-sky data this should be trivial using the popular [pvlib library](https://pvlib-python.readthedocs.io/en/stable/).
+__\*\*Note__ there are many ways to derive clear sky irradiance, which is the component needed to convert CAL to SIS. Here, I have attached for the period 2016-05-01 to 2016-05-05 using Ineichen Clear Sky model. If you want more clear-sky data this should be trivial using the popular [pvlib library](https://pvlib-python.readthedocs.io/en/stable/).
 
 ### 2.3 Pre-trained model
 We are supplying a pre-trained model specifically optimized for 2-step ahead prediction (1-hour), but the model can still be used for longer time horizons by setting n to be the number of future frames you want to predict using the flag `n_future_frames=n`. If you are interested in models optimized for more time steps let me know (up to 8 future frames).  
