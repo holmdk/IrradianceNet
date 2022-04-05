@@ -1,5 +1,5 @@
 # IrradianceNet
-This is the official implementation of the [IrradianceNet paper (work in progress)]().
+This is the official implementation of the [IrradianceNet paper](https://www.sciencedirect.com/science/article/pii/S0038092X21008306).
 
 ### Sample 1
 ![Alt Text](results/convlstm/video_sample1.gif)
